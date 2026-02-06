@@ -9,89 +9,108 @@ class Math
     void calculateDerivative()
     {
         // Take user input for degree of the polynomial
-        int polynomialDegree;
-        vector<int> coefficients, powers;
+
+        int polyDegree;
+        vector<int> coeffs, powers;
         cout << "Enter the degree of the polynomial: ";
-        cin >> polynomialDegree;
-        coefficients.assign(polynomialDegree, 0);
-        powers.assign(polynomialDegree, 0);
+        cin >> polyDegree;
+        coeffs.assign(polyDegree, 0);
+        powers.assign(polyDegree, 0);
 
         // Take user input of coefficients of x in the polynomial
-        cout << "Enter the " << polynomialDegree << " coefficient(s) of x in the polynomial: " << endl;
-        for (int i = 0; i < polynomialDegree; i++)
+        cout << "Enter the " << polyDegree << " coefficient(s) of x in the polynomial and its constant: " << endl;
+        for (int i = 0; i <= polyDegree; i++)
         {
-            powers[i] = polynomialDegree - i - 1;
-            cout << "Coefficient of x_" << i << ": ";
-            cin >> coefficients[i];
-            
-            // Output test
-            /*
-            cout << "Coefficient of x_" << i << ": " << coefficients[i] << endl;
-            cout << "Power of x_" << i << ": x^" << powers[i] << endl;
-            */
+            powers[i] = polyDegree - i;
+
+            if (i == polyDegree)
+            {
+                cout << "Constant: ";
+            }
+            else
+            {
+                cout << "Coefficient of x_" << i << ": ";
+            }
+
+            cin >> coeffs[i];
         }
 
         // Arrage initial function
-        int tempCoefficient = coefficients[0];
+
+        int tempCoeff = coeffs[0];
         cout << endl << "f(x) = ";
-        for (int j = 0; j < polynomialDegree; j++)
+        for (int j = 0; j <= polyDegree; j++)
         {
             if (j > 0)
             {
-                tempCoefficient = coefficients[j] < 0 ? -coefficients[j] : coefficients[j];
-                cout << ((coefficients[j] < 0) ? "- " : "+ ");
+                tempCoeff = fabs(coeffs[j]);
+                cout << ((coeffs[j] < 0) ? "- " : "+ ");
             }
         
             if (powers[j] > 1)
             {
-                cout << tempCoefficient << "x^" << powers[j] << " ";
+                cout << tempCoeff << "x^" << powers[j] << " ";
             }
             else if (powers[j] == 1)
             {
-                cout << tempCoefficient <<  "x ";
+                cout << tempCoeff <<  "x ";
             }
             else
             {
-                cout << tempCoefficient;
+                cout << tempCoeff;
             }
         }
         cout << endl;
 
         // Calculate derivative of f(x)
-        int newCoefficient, newPower;
-        cout << "f'(x) = ";
-        for (int d = 0; d < polynomialDegree; d++)
-        {
-            newCoefficient = coefficients[d] * powers[d];
-            newPower = powers[d] - 1 < 0 ? 0 : powers[d] - 1;
-        
-            if (d > 0)
-            {
-                newCoefficient = coefficients[d] < 0 ? -newCoefficient : newCoefficient;
 
-                if (newPower == 0 && newCoefficient == 0)
+        int newCoeff, newPower;
+        bool isZero = false;
+        cout << "f'(x) = ";
+        for (int d = 0; d < polyDegree; d++)
+        {
+            newCoeff = powers[d] * coeffs[d];
+            newPower = powers[d] - 1 < 0 ? 0 : powers[d] - 1;
+
+            if (d > 0 || newCoeff == 0)
+            {
+                if (((newPower == 0 || newPower > 0) && newCoeff == 0) || (coeffs[d - 1] == 0 && newCoeff != 0))
                 {
                     cout << "";
                 }
                 else
                 {
-                    cout << ((coefficients[d] < 0) ? "- " : "+ ");
+                    cout << (coeffs[d] < 0 ? "" : "+ ");
                 }
             }
 
             if (newPower > 1)
             {
-                cout << newCoefficient  << "x^" << newPower << " ";
+                if (newCoeff == 0)
+                {
+                    cout << "";
+                }
+                else
+                {
+                    cout << newCoeff << "x^" << newPower << " ";
+                }
             }
             else if (newPower == 1)
             {
-                cout << newCoefficient  << "x ";
+                if (newCoeff == 0)
+                {
+                    cout << "";
+                }
+                else
+                {
+                    cout << newCoeff << "x ";
+                }
             }
             else
             {
-                if (newCoefficient != 0)
+                if (newCoeff != 0)
                 {
-                    cout << newCoefficient;
+                    cout << newCoeff;
                 }
             }
         }
@@ -115,28 +134,13 @@ class Math
         {
             sum += coefficient * pow(i, power);
             
-            if (sum == 0)
+            if (sum == 0 || (coefficient == 1 && power == 1))
             {
-                if (coefficient == 1 && power == 1)
-                {
-                    cout << i;
-                }
+                cout << i;
             }
             else
             {
-                if (power == 1 && coefficient != 1)
-                {
-                    cout << coefficient << "(" << i << ")";
-                }
-                else if (power != 1 && coefficient == 1)
-                {
-                    cout << "(" << i << ")^" << power;
-                }
-                else
-                {
-                    cout << coefficient << "(" << i << ")^" << power;
-                }
-                
+                cout << coefficient << "(" << i << ")^" << power;
             }
 
 
@@ -145,7 +149,7 @@ class Math
                 cout << " + ";
             }
         }
-        cout << " = " << sum << endl;
+        cout << " = " << sum;
     }
 };
 
@@ -166,9 +170,9 @@ int main()
     Math math;
     Program program;
 
-    //math.calculateDerivative();
-    math.calculateSummation();
-    //program.terminate();
+    math.calculateDerivative();
+    //math.calculateSummation();
+    program.terminate();
     return 0;
 }
 
