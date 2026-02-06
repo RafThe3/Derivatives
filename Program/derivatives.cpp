@@ -2,86 +2,173 @@
 #include <vector>
 using namespace std;
 
-int main()
+class Math
 {
-    int rows;
-    cout << "Enter the degree of the polynomial: ";
-    cin >> rows;
-    
-    vector<int> coefficients(rows, 0), powers(rows, 0);
-    cout << "Enter the coefficients of x in the polynomial: ";
-    for (int i = 0; i < rows; i++)
-    {
-        cin >> coefficients[i];
-        cout << "Coefficient of x_" << i << ": " << coefficients[i] << endl;
-        powers[i] = rows - i - 1;
-        cout << "Powers: x^" << powers[i] << endl;
-    }
+    public:
 
-    int tempCoefficient = coefficients[0];
-    cout << "f(x) = ";
-    for (int j = 0; j < rows; j++)
+    void calculateDerivative()
     {
-        if (j > 0)
-        {
-            tempCoefficient = coefficients[j] < 0 ? -coefficients[j] : coefficients[j];
-            cout << ((coefficients[j] < 0) ? "- " : "+ ");
-        }
-       
-        if (powers[j] > 1)
-        {
-            cout << tempCoefficient << "x^" << powers[j] << " ";
-        }
-        else if (powers[j] == 1)
-        {
-            cout << tempCoefficient <<  "x ";
-        }
-        else
-        {
-            cout << tempCoefficient;
-        }
-    }
-    cout << endl;
+        // Take user input for degree of the polynomial
+        int polynomialDegree;
+        vector<int> coefficients, powers;
+        cout << "Enter the degree of the polynomial: ";
+        cin >> polynomialDegree;
+        coefficients.assign(polynomialDegree, 0);
+        powers.assign(polynomialDegree, 0);
 
-    int newCoefficient, newPower;
-    cout << "f'(x) = ";
-    for (int d = 0; d < rows; d++)
-    {
-        newCoefficient = coefficients[d] * powers[d];
-        newPower = powers[d] - 1 < 0 ? 0 : powers[d] - 1;
-       
-        if (d > 0)
+        // Take user input of coefficients of x in the polynomial
+        cout << "Enter the " << polynomialDegree << " coefficient(s) of x in the polynomial: " << endl;
+        for (int i = 0; i < polynomialDegree; i++)
         {
-            newCoefficient = coefficients[d] < 0 ? -newCoefficient : newCoefficient;
+            powers[i] = polynomialDegree - i - 1;
+            cout << "Coefficient of x_" << i << ": ";
+            cin >> coefficients[i];
+            
+            // Output test
+            /*
+            cout << "Coefficient of x_" << i << ": " << coefficients[i] << endl;
+            cout << "Power of x_" << i << ": x^" << powers[i] << endl;
+            */
+        }
 
-            if (newPower == 0 && newCoefficient == 0)
+        // Arrage initial function
+        int tempCoefficient = coefficients[0];
+        cout << endl << "f(x) = ";
+        for (int j = 0; j < polynomialDegree; j++)
+        {
+            if (j > 0)
             {
-                cout << "";
+                tempCoefficient = coefficients[j] < 0 ? -coefficients[j] : coefficients[j];
+                cout << ((coefficients[j] < 0) ? "- " : "+ ");
+            }
+        
+            if (powers[j] > 1)
+            {
+                cout << tempCoefficient << "x^" << powers[j] << " ";
+            }
+            else if (powers[j] == 1)
+            {
+                cout << tempCoefficient <<  "x ";
             }
             else
             {
-                cout << ((coefficients[d] < 0) ? "- " : "+ ");
+                cout << tempCoefficient;
             }
         }
+        cout << endl;
 
-        if (newPower > 1)
+        // Calculate derivative of f(x)
+        int newCoefficient, newPower;
+        cout << "f'(x) = ";
+        for (int d = 0; d < polynomialDegree; d++)
         {
-            cout << newCoefficient  << "x^" << newPower << " ";
-        }
-        else if (newPower == 1)
-        {
-            cout << newCoefficient  << "x ";
-        }
-        else
-        {
-            if (newCoefficient != 0)
+            newCoefficient = coefficients[d] * powers[d];
+            newPower = powers[d] - 1 < 0 ? 0 : powers[d] - 1;
+        
+            if (d > 0)
             {
-                cout << newCoefficient;
+                newCoefficient = coefficients[d] < 0 ? -newCoefficient : newCoefficient;
+
+                if (newPower == 0 && newCoefficient == 0)
+                {
+                    cout << "";
+                }
+                else
+                {
+                    cout << ((coefficients[d] < 0) ? "- " : "+ ");
+                }
+            }
+
+            if (newPower > 1)
+            {
+                cout << newCoefficient  << "x^" << newPower << " ";
+            }
+            else if (newPower == 1)
+            {
+                cout << newCoefficient  << "x ";
+            }
+            else
+            {
+                if (newCoefficient != 0)
+                {
+                    cout << newCoefficient;
+                }
             }
         }
+        cout << endl;
     }
-    cout << endl;
 
+    void calculateSummation()
+    {
+        int min, max, coefficient, power, sum = 0;
+
+        cout << "Enter the minimum range of values to calculate: ";
+        cin >> min;
+        cout << "Enter the maximum range of values to calculate: ";
+        cin >> max;
+        cout << "Enter the coefficient of i: ";
+        cin >> coefficient;
+        cout << "Enter the power of i: ";
+        cin >> power;
+
+        for (int i = min; i < max; ++i)
+        {
+            sum += coefficient * pow(i, power);
+            
+            if (sum == 0)
+            {
+                if (coefficient == 1 && power == 1)
+                {
+                    cout << i;
+                }
+            }
+            else
+            {
+                if (power == 1 && coefficient != 1)
+                {
+                    cout << coefficient << "(" << i << ")";
+                }
+                else if (power != 1 && coefficient == 1)
+                {
+                    cout << "(" << i << ")^" << power;
+                }
+                else
+                {
+                    cout << coefficient << "(" << i << ")^" << power;
+                }
+                
+            }
+
+
+            if (i != max - 1)
+            {
+                cout << " + ";
+            }
+        }
+        cout << " = " << sum << endl;
+    }
+};
+
+class Program
+{
+    public:
+
+    void terminate()
+    {
+        int var;
+        cout << endl << "Enter any key + ENTER to terminate the program...";
+        cin >> var;
+    }
+};
+
+int main()
+{
+    Math math;
+    Program program;
+
+    //math.calculateDerivative();
+    math.calculateSummation();
+    //program.terminate();
     return 0;
 }
 
